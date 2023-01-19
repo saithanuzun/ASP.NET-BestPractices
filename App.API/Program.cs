@@ -38,6 +38,7 @@ builder.Services.AddDbContext<AppDbContext>(x =>
 
 });
 
+builder.Services.AddScoped(typeof(NotFoundFilter<>));
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
 builder.Services.AddScoped<IProductRepository,ProductRepository>();

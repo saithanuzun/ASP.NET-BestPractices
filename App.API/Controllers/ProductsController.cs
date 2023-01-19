@@ -5,6 +5,7 @@ using App.Core;
 using App.Core.DTOs;
 using App.Core.Services;
 using App.Core.Entities;
+using App.API.Filters;
 
 namespace App.API.Controllers
 {
@@ -27,7 +28,10 @@ namespace App.API.Controllers
             var productsDtos = _mapper.Map<List<ProductDto>>(products.ToList());
             return CreateActionResult(CustomResponseDto<List<ProductDto>>.Success(200, productsDtos));
         }
+
+
         // GET /api/products/5
+        [ServiceFilter(typeof(NotFoundFilter<Product>))]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
