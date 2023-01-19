@@ -14,8 +14,13 @@ using FluentValidation.AspNetCore;
 
 using Microsoft.Extensions.DependencyInjection;
 using App.Service.Services;
+using App.API.Filters;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
 
 builder.Services.AddDbContext<AppDbContext>(x =>
 {
@@ -36,8 +41,15 @@ builder.Services.AddScoped<ICategoryService,CategoryService>();
 
  
 
-builder.Services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
+builder.Services.AddControllers(options =>options.Filters.Add(new ValidateFilterAttribute())).AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.Configure<ApiBehaviorOptions>(options=>{
+    options.SuppressModelStateInvalidFilter=true;
+});
+
+
+
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
