@@ -15,19 +15,26 @@ using App.Service.Services;
 using App.API.Filters;
 using Microsoft.AspNetCore.Mvc;
 using App.API.Middlewares;
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using App.API.Modules;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers(options =>options.Filters.Add(new ValidateFilterAttribute())).AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
+builder.Services.AddControllers(options =>  options.Filters.Add(new ValidateFilterAttribute()))
+    .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
 
 builder.Services.Configure<ApiBehaviorOptions>(options=>{
     options.SuppressModelStateInvalidFilter=true;
 });
 
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddMemoryCache();
 
 builder.Services.AddAutoMapper(typeof(MapProfile));
+builder.Services.AddScoped(typeof(NotFoundFilter<>));
 
 builder.Services.AddDbContext<AppDbContext>(x =>
 {
@@ -37,20 +44,15 @@ builder.Services.AddDbContext<AppDbContext>(x =>
     });
 
 });
-
-builder.Services.AddScoped(typeof(NotFoundFilter<>));
-builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
-builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
-builder.Services.AddScoped<IProductRepository,ProductRepository>();
-builder.Services.AddScoped<IProductService,ProductService>();
-builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
-builder.Services.AddScoped<ICategoryService,CategoryService>();
-
  
 
 
 
-
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+{
+    containerBuilder.RegisterModule(new RepoServiceModule());
+});
 
 
 
