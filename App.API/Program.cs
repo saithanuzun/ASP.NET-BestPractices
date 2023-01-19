@@ -16,11 +16,20 @@ using Microsoft.Extensions.DependencyInjection;
 using App.Service.Services;
 using App.API.Filters;
 using Microsoft.AspNetCore.Mvc;
+using App.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers(options =>options.Filters.Add(new ValidateFilterAttribute())).AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
 
+builder.Services.Configure<ApiBehaviorOptions>(options=>{
+    options.SuppressModelStateInvalidFilter=true;
+});
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddMemoryCache();
+
+builder.Services.AddAutoMapper(typeof(MapProfile));
 
 builder.Services.AddDbContext<AppDbContext>(x =>
 {
@@ -31,7 +40,6 @@ builder.Services.AddDbContext<AppDbContext>(x =>
 
 });
 
-builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
@@ -41,20 +49,16 @@ builder.Services.AddScoped<ICategoryService,CategoryService>();
 
  
 
-builder.Services.AddControllers(options =>options.Filters.Add(new ValidateFilterAttribute())).AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
-builder.Services.Configure<ApiBehaviorOptions>(options=>{
-    options.SuppressModelStateInvalidFilter=true;
-});
 
 
 
-builder.Services.AddEndpointsApiExplorer();
+
+
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+app.UserCustomException();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
