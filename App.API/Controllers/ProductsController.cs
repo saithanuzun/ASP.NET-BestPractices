@@ -15,10 +15,13 @@ namespace App.API.Controllers
         private readonly IMapper _mapper;
         private readonly IService<Product> _service;
 
-        public ProductsController(IService<Product> service, IMapper mapper)
+        private readonly IProductService _productService;
+
+        public ProductsController(IService<Product> service, IMapper mapper,IProductService productService)
         {
             _service = service;
             _mapper = mapper;
+            _productService=productService;
         }
         /// GET api/products
         [HttpGet]
@@ -36,6 +39,16 @@ namespace App.API.Controllers
             var productsDto = _mapper.Map<ProductDto>(product);
             return CreateActionResult(CustomResponseDto<ProductDto>.Success(200, productsDto));
         }
+
+        //[HttpGet("GetProductsWithCategory")]
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetProductsWithCategory()
+        {
+
+            return CreateActionResult(await _productService.GetProductsWithCategory());
+        }
+
+
 
         [HttpPost]
         public async Task<IActionResult> Save(ProductDto productDto)
