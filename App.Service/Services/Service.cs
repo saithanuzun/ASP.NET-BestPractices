@@ -3,6 +3,7 @@ using App.Core.Repositories;
 using App.Core.Services;
 using System.Linq.Expressions;
 using App.Core.UnitOfWorks;
+using App.Service.Exceptions;
 
 namespace App.Service.Services
 {
@@ -44,6 +45,8 @@ namespace App.Service.Services
         {
             var hasProduct = await _repository.GetByIdAsync(id);
 
+             if(hasProduct is null)   
+                throw new NotFoundException(typeof(T).Name + "Not Found");
             
             return hasProduct;
         }

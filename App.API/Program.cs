@@ -10,8 +10,6 @@ using App.Service.Mapping;
 using Microsoft.EntityFrameworkCore;
 using App.Service.Validations;
 using FluentValidation.AspNetCore;
-
-
 using Microsoft.Extensions.DependencyInjection;
 using App.Service.Services;
 using App.API.Filters;
@@ -58,7 +56,7 @@ builder.Services.AddScoped<ICategoryService,CategoryService>();
 var app = builder.Build();
 
 app.UseHttpsRedirection();
-app.UserCustomException();
+app.UseCustomException();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
