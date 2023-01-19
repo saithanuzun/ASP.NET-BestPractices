@@ -4,6 +4,8 @@ using App.Core.DTOs;
 
 namespace App.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class CustomBaseController : ControllerBase
     {
         [NonAction]

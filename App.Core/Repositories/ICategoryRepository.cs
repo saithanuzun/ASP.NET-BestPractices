@@ -6,8 +6,8 @@ using App.Core.Entities;
 
 namespace App.Core.Repositories
 {
-    public interface IProductRepository : IGenericRepository<Product>
+    public interface ICategoryRepository : IGenericRepository<Category>
     {
-        Task<List<Product>> GetProductsWithCategory(); 
+        Task<Category> GetSingleCategoryByIdWithProductAsync(int id);
     }
 }

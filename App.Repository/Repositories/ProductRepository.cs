@@ -12,6 +12,7 @@ namespace App.Repository.Repositories
     {
         public ProductRepository(AppDbContext context) : base(context)
         {
+            
         }
 
         public async Task<List<Product>> GetProductsWithCategory()

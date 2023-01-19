@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace App.Core.DTOs
 {
-    public class ProductWithCategoryDto : ProductDto
+    public class CategoryWithProductsDto : CategoryDto
     {
-        public CategoryDto Category { get; set; }
+        public List<ProductDto> Products { get; set; }
     }
 }
