@@ -21,8 +21,8 @@ using App.API.Modules;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers(options =>  options.Filters.Add(new ValidateFilterAttribute()))
-    .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
+
+builder.Services.AddControllers();
 
 builder.Services.Configure<ApiBehaviorOptions>(options=>{
     options.SuppressModelStateInvalidFilter=true;
@@ -31,6 +31,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options=>{
 
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddMemoryCache();
 
 builder.Services.AddAutoMapper(typeof(MapProfile));
@@ -57,6 +59,12 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 app.UseCustomException();

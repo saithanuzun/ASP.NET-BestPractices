@@ -10,6 +10,7 @@ using App.API.Filters;
 namespace App.API.Controllers
 {
     
+
     public class ProductsController : CustomBaseController
     {
         private readonly IMapper _mapper;
