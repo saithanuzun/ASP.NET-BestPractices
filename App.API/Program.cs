@@ -22,12 +22,13 @@ using App.API.Modules;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>  options.Filters.Add(new ValidateFilterAttribute()))
+    .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<ProductDtoValidator>());
+
 
 builder.Services.Configure<ApiBehaviorOptions>(options=>{
     options.SuppressModelStateInvalidFilter=true;
 });
-
 
 
 builder.Services.AddEndpointsApiExplorer();
