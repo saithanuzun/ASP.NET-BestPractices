@@ -15,7 +15,7 @@ namespace App.Repository.Repositories
 
         }
 
-        public async Task<Category> GetSingleCategoryByIdWithProductAsync(int CategoryId)
+        public async Task<Category> GetSingleCategoryByIdWithProductsAsync(int CategoryId)
         {
             return await _context.Categories.Include(x=>x.Products).Where(x=>x.Id==CategoryId).SingleOrDefaultAsync();
         }

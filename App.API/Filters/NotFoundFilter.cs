@@ -10,10 +10,10 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace App.API.Filters
 {
-    public class NotFoundFilter<T> : IAsyncActionFilter where T : BaseEntity
+    public class NotFoundFilter<TEntity,TDto> : IAsyncActionFilter where TEntity : BaseEntity where TDto : class
     {
-        private readonly IService<T> _service;
-        public NotFoundFilter(IService<T> service)      
+        private readonly IService<TEntity,TDto> _service;
+        public NotFoundFilter(IService<TEntity,TDto> service)      
         {
             _service = service;
         }
@@ -32,14 +32,14 @@ namespace App.API.Filters
 
             var anyEntity= await _service.AnyAsync(x=>x.Id==id); 
 
-            if(anyEntity)
+            if(anyEntity.Data)
             {  
                 await next.Invoke();
                 return; 
 
             }
 
-            context.Result = new NotFoundObjectResult(CustomResponseDto<NoContentDto>.Fail(404,typeof(T).Name + "Not Found"));
+            context.Result = new NotFoundObjectResult(CustomResponseDto<NoContentDto>.Fail(404,typeof(TEntity).Name + " Not Found"));
 
         }
     }

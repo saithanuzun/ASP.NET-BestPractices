@@ -7,8 +7,9 @@ using App.Core.Entities;
 
 namespace App.Core.Services
 {
-    public interface ICategoryService :IService<Category>
+    public interface ICategoryService :IService<Category , CategoryDto>
     {
-        Task<CustomResponseDto<CategoryWithProductsDto>> GetSingleCategoryByIdWithProducts(int CategoryId);
+        public Task<CustomResponseDto<CategoryWithProductsDto>> GetSingleCategoryByIdWithProductsAsync(int categoryId);
+
     }
 }

@@ -24,7 +24,7 @@ namespace App.API.Modules
                 .InstancePerLifetimeScope();
 
 
-            builder.RegisterGeneric(typeof(Service<>)).As(typeof(IService<>))
+            builder.RegisterGeneric(typeof(Service<,>)).As(typeof(IService<,>))
                 .InstancePerLifetimeScope();         
 
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();  

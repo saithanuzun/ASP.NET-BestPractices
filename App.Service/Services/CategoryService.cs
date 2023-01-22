@@ -1,32 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
 using App.Core.DTOs;
-using App.Core.Entities;
 using App.Core.Repositories;
 using App.Core.Services;
 using App.Core.UnitOfWorks;
-using AutoMapper;
+using App.Core.Entities;
 
 namespace App.Service.Services
 {
-    public class CategoryService : Service<Category>, ICategoryService
+    public class CategoryService : Service<Category, CategoryDto>, ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IMapper _mapper;
-        public CategoryService(IGenericRepository<Category> repository, IUnitOfWork unitOfWork , IMapper mapper, ICategoryRepository categoryRepository) : base(repository, unitOfWork)
+
+        public CategoryService(IGenericRepository<Category> repository, IUnitOfWork unitOfWork, IMapper mapper, ICategoryRepository categoryRepository) : base(repository, unitOfWork, mapper)
         {
-            _mapper=mapper;
-            _categoryRepository=categoryRepository;
+            _categoryRepository = categoryRepository;
         }
 
-        public async Task<CustomResponseDto<CategoryWithProductsDto>> GetSingleCategoryByIdWithProducts(int CategoryId)
+        public async Task<CustomResponseDto<CategoryWithProductsDto>> GetSingleCategoryByIdWithProductsAsync(int categoryId)
         {
-            var category= await _categoryRepository.GetSingleCategoryByIdWithProductAsync(CategoryId);
+            var category = await _categoryRepository.GetSingleCategoryByIdWithProductsAsync(categoryId);
+
             var categoryDto = _mapper.Map<CategoryWithProductsDto>(category);
 
-            return CustomResponseDto<CategoryWithProductsDto>.Success(200,categoryDto );
+            return CustomResponseDto<CategoryWithProductsDto>.Success(200, categoryDto);
         }
     }
 }

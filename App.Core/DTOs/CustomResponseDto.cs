@@ -14,6 +14,8 @@ namespace App.Core.DTOs
         [JsonIgnore]
         public int StatusCode { get; set; }
 
+        //Factory Design Pattern
+
         public static CustomResponseDto<T> Success(int statusCode, T data)
         {
             return new CustomResponseDto<T> { Data = data, StatusCode = statusCode };

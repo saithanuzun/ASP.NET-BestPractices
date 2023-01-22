@@ -8,6 +8,6 @@ namespace App.Core.Repositories
 {
     public interface ICategoryRepository : IGenericRepository<Category>
     {
-        Task<Category> GetSingleCategoryByIdWithProductAsync(int id);
+        Task<Category> GetSingleCategoryByIdWithProductsAsync(int id);
     }
 }
